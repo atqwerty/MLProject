@@ -61,17 +61,14 @@ data_set_raw = pickle.load( open( "data_set.bin", "rb" ) )
 data_set = np.empty([9, 1000000])
 data_set = np.array(data_set_raw)
 train_data = data_set[:90000]
+test_data = data_set[100000:100010]
 
 # KMEANS clusterization
-model = MiniBatchKMeans(n_clusters=2, init="k-means++", n_init=1000)
+model = MiniBatchKMeans(n_clusters=2, init="k-means++", n_init=100)
 model.fit(train_data)
-all_predictions = model.predict(train_data)
-# all_predictions = AgglomerativeClustering(n_clusters=2, affinity='euclidean').fit_predict(train_data)
+all_predictions = model.predict(test_data)
+
 # fig = plt.figure()
 # ax = fig.add_subplot(111, projection='3d')
-plt.scatter(train_data[:, 0], train_data[:, 1], c=all_predictions, s=50, cmap='viridis')
+plt.scatter(test_data[:, 0], test_data[:, 1], c=all_predictions, s=50, cmap='viridis')
 plt.show(block=True)
-
-# centers = model.cluster_centers_
-# plt.scatter(data_set[:, 0], data_set[:, 1], c='black', s=200, alpha=0.5)
-# plt.show(block = True)
