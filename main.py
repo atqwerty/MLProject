@@ -1,15 +1,9 @@
 import numpy as np
 import csv
-import pandas as pd
 import pickle
-from sklearn.cluster import MiniBatchKMeans
-from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from mpl_toolkits.mplot3d import Axes3D
-from sklearn.cluster import AgglomerativeClustering
 from sklearn.model_selection import KFold
-from sklearn.preprocessing import MinMaxScaler
+from customMiniBatch import MiniBatchKMeans
 
 def avg(array):
     avg_holder = []
@@ -65,10 +59,9 @@ test_data = data_set[100000:100010]
 
 # KMEANS clusterization
 model = MiniBatchKMeans(n_clusters=2, init="k-means++", n_init=100)
-model.fit(train_data)
-all_predictions = model.predict(test_data)
-
+all_predictions = model.fit_predict(train_data)
+# all_predictions = model.predict(test_data)
 # fig = plt.figure()
 # ax = fig.add_subplot(111, projection='3d')
-plt.scatter(test_data[:, 0], test_data[:, 1], c=all_predictions, s=50, cmap='viridis')
+plt.scatter(train_data[:, 0], train_data[:, 1], c=all_predictions, s=50, cmap='viridis')
 plt.show(block=True)
