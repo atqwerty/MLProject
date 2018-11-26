@@ -4,6 +4,7 @@ import pickle
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 from customMiniBatch import MiniBatchKMeans
+from mpl_toolkits.mplot3d import Axes3D
 
 def avg(array):
     avg_holder = []
@@ -54,14 +55,16 @@ def avg(array):
 data_set_raw = pickle.load( open( "data_set.bin", "rb" ) )
 data_set = np.empty([9, 1000000])
 data_set = np.array(data_set_raw)
-train_data = data_set[:90000]
+data_set = np.delete(data_set, np.s_[3:9], axis=1)
+train_data = data_set[:100]
 test_data = data_set[100000:100010]
 
 # KMEANS clusterization
-model = MiniBatchKMeans(n_clusters=2, init="k-means++", n_init=100)
-all_predictions = model.fit_predict(train_data)
+model = MiniBatchKMeans(n_clusters=2, init="k-means++", batch_size=100).fit(train_data)
+all_predictions = model.predict(test_data)
+print(all_predictions)
 # all_predictions = model.predict(test_data)
-# fig = plt.figure()
-# ax = fig.add_subplot(111, projection='3d')
-plt.scatter(train_data[:, 0], train_data[:, 1], c=all_predictions, s=50, cmap='viridis')
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(test_data[:, 0], test_data[:, 1], test_data[:, 2], c=all_predictions, s=50, cmap='viridis')
 plt.show(block=True)
