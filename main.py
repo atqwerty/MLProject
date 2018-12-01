@@ -10,6 +10,19 @@ from customMiniBatch import MiniBatchKMeans
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.preprocessing import StandardScaler
 
+# Accuracy check
+def acc(real, predicted):
+    TP = 0
+    TN = 0
+    FP = 0
+    FN = 0
+    for i in range(len(real)):
+        if real[i] == predicted[i] and real[i] == 1: TP += 1
+        elif real[i] == predicted[i] and real[i] == 0: TN += 1
+        elif real[i] != predicted[i] and real[i] == 1: FP += 1
+        else: FN += 1
+    return ((TP + TN) / (TP + TN + FP + FN)) * 100
+
 # Average function for all the NaN values in dataset
 def avg(array):
     avg_holder = []
@@ -54,11 +67,11 @@ def avg(array):
 # Deserialization of formatted data
 data_set_raw = pickle.load( open( "data_set.bin", "rb" ) ) # we take out serialized dataset (raw)
 data_set = np.empty([9, 1000000])
-data_set = np.array(data_set_raw) # present raw dataset as nuply.array
+data_set = np.array(data_set_raw) # present raw dataset as numpy.array
 
 # Data preprocessing
 data_set = np.delete(data_set, np.s_[3:9], axis=1) # take out not important features
-train_data = data_set[:1000] # training data
+train_data = data_set[:950000] # training data
 test_data = data_set[-10:] # preusdo random test
 
 # Transformation of data
@@ -71,6 +84,10 @@ model = MiniBatchKMeans(n_clusters=2, init="k-means++", batch_size=100) # create
 all_predictions_train = model.fit_predict(train_data)
 all_predictions_test = model.predict(test_data)
 print(all_predictions_test)
+real = [1, 1, 1, 1, 0, 1, 0, 0, 1, 0]
+real1 = [0, 0, 0, 0, 1, 0, 1, 1, 0, 1]
+print(acc(real, all_predictions_test))
+print(acc(real1, all_predictions_test))
 
 # Visualization
 fig = plt.figure(figsize=plt.figaspect(0.5))
