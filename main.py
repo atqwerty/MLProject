@@ -71,7 +71,7 @@ data_set = np.array(data_set_raw) # present raw dataset as numpy.array
 
 # Data preprocessing
 data_set = np.delete(data_set, np.s_[3:9], axis=1) # take out not important features
-train_data = data_set[:950000] # training data
+train_data = data_set[:10000] # training data (from 1000 to 950000)
 test_data = data_set[-10:] # preusdo random test
 
 # Transformation of data
@@ -84,6 +84,7 @@ model = MiniBatchKMeans(n_clusters=2, init="k-means++", batch_size=100) # create
 all_predictions_train = model.fit_predict(train_data)
 all_predictions_test = model.predict(test_data)
 print(all_predictions_test)
+print("Accuracy (in %):")
 real = [1, 1, 1, 1, 0, 1, 0, 0, 1, 0]
 real1 = [0, 0, 0, 0, 1, 0, 1, 1, 0, 1]
 print(acc(real, all_predictions_test))
